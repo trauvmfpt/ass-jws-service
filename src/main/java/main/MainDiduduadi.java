@@ -10,5 +10,6 @@ public class MainDiduduadi {
 
     public static void main(String[] argv) {
         Endpoint.publish("http://localhost:9000/place-service", new PlaceService());
+        System.out.println("running in port: 9000");
     }
 }
