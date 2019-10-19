@@ -4,6 +4,6 @@
 
     <endpoint
             name='HelloWorld'
-            implementation='example.HelloWorld'
+            implementation='main.MainDiduduadi'
             url-pattern='/services/HelloWorld'/>
 </endpoints>
