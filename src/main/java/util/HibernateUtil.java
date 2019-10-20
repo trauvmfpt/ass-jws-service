@@ -33,6 +33,10 @@ public class HibernateUtil {
 
     public static void main(final String[] args) throws Exception {
         PlaceService ps = new PlaceService();
-        ps.createPlace(new Place());
+        Place place = new Place();
+        place.setName("test");
+        place.setAddress("test");
+        ps.createPlace(place);
+
     }
 }

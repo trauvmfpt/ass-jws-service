@@ -1,6 +1,7 @@
 package entity;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -88,5 +89,12 @@ public class Post {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public void addRating(Rating rating) {
+        if (this.ratingSet == null) {
+            this.ratingSet = new HashSet<Rating>();
+        }
+        this.ratingSet.add(rating);
     }
 }
