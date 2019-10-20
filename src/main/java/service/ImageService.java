@@ -1,33 +1,27 @@
 package service;
 
 import entity.Image;
-import entity.Post;
+import entity.Image;
 import org.hibernate.Session;
 import util.HibernateUtil;
 
 import javax.jws.WebMethod;
-import javax.jws.WebService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@WebService
-public class PostService {
-    private static final Logger LOGGER = Logger.getLogger(PostService.class.getName());
+public class ImageService {
+    private static final Logger LOGGER = Logger.getLogger(ImageService.class.getName());
 
     @WebMethod
-    public boolean create(Post post){
-        if(post != null){
-            for (Image image :
-                    post.getImageSet()) {
-                image.setPost(post);
-            }
-            post.setStatus(1);
+    public boolean create(Image image){
+        if(image != null){
+            image.setStatus(1);
             try{
                 Session session = HibernateUtil.getSession();
                 session.beginTransaction();
-                session.save(post);
+                session.save(image);
                 session.getTransaction().commit();
                 session.close();
                 return true;
@@ -42,15 +36,15 @@ public class PostService {
     }
 
     @WebMethod
-    public List<Post> getAll(){
-        List<Post> postList = new ArrayList<Post>();
+    public List<Image> getAll(){
+        List<Image> imageList = new ArrayList<Image>();
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
-            postList =  session.createQuery("from Post ", Post.class).list();
+            imageList =  session.createQuery("from Image ", Image.class).list();
             session.close();
-            if(postList != null){
-                return postList;
+            if(imageList != null){
+                return imageList;
             }
             return null;
         }
@@ -62,14 +56,14 @@ public class PostService {
     }
 
     @WebMethod
-    public Post getById(int postId){
+    public Image getById(int imageId){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
-            Post post =  session.get(Post.class, postId);
+            Image image =  session.get(Image.class, imageId);
             session.close();
-            if(post != null){
-                return post;
+            if(image != null){
+                return image;
             }
             return null;
         }
@@ -81,11 +75,11 @@ public class PostService {
     }
 
     @WebMethod
-    public boolean update(Post post){
+    public boolean update(Image image){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
-            session.update(post);
+            session.update(image);
             session.getTransaction().commit();
             session.close();
             return true;
@@ -98,14 +92,14 @@ public class PostService {
     }
 
     @WebMethod
-    public boolean delete(Post post){
+    public boolean delete(Image image){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
-            Post existedPost =  session.get(Post.class, post.getId());
-            if(existedPost != null){
-                existedPost.setStatus(0);
-                session.update(existedPost);
+            Image existedImage =  session.get(Image.class, image.getId());
+            if(existedImage != null){
+                existedImage.setStatus(0);
+                session.update(existedImage);
                 session.getTransaction().commit();
                 session.close();
                 return true;

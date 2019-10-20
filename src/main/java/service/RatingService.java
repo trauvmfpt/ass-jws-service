@@ -1,33 +1,28 @@
 package service;
 
 import entity.Image;
-import entity.Post;
+import entity.Rating;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import util.HibernateUtil;
 
 import javax.jws.WebMethod;
-import javax.jws.WebService;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@WebService
-public class PostService {
-    private static final Logger LOGGER = Logger.getLogger(PostService.class.getName());
+public class RatingService {
+    private static final Logger LOGGER = Logger.getLogger(RatingService.class.getName());
 
     @WebMethod
-    public boolean create(Post post){
-        if(post != null){
-            for (Image image :
-                    post.getImageSet()) {
-                image.setPost(post);
-            }
-            post.setStatus(1);
+    public boolean create(Rating rating){
+        if(rating != null){
             try{
                 Session session = HibernateUtil.getSession();
                 session.beginTransaction();
-                session.save(post);
+                session.save(rating);
                 session.getTransaction().commit();
                 session.close();
                 return true;
@@ -42,50 +37,51 @@ public class PostService {
     }
 
     @WebMethod
-    public List<Post> getAll(){
-        List<Post> postList = new ArrayList<Post>();
+    public List<Rating> getAll(){
+        List<Rating> ratingList = new ArrayList<Rating>();
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
-            postList =  session.createQuery("from Post ", Post.class).list();
+            ratingList =  session.createQuery("from Rating ", Rating.class).list();
             session.close();
-            if(postList != null){
-                return postList;
+            if(ratingList != null){
+                return ratingList;
             }
             return null;
         }
         catch (Exception ex){
-            LOGGER.log(Level.INFO, "Error create place");
+            LOGGER.log(Level.INFO, "Error create rating");
             LOGGER.log(Level.WARNING, ex.getMessage());
         }
         return null;
     }
 
     @WebMethod
-    public Post getById(int postId){
+    public Rating getByUserIdAndPostId(int userId, int postId){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
-            Post post =  session.get(Post.class, postId);
+            String sqlQuery = "select r from Rating r where r.user.id = :userId and r.post.id = :postId";
+            Rating rating =  session.createQuery(sqlQuery, Rating.class).setParameter("userId", userId).setParameter("postId", postId).getSingleResult();
             session.close();
-            if(post != null){
-                return post;
+            if(rating != null){
+                return rating;
             }
             return null;
         }
         catch (Exception ex){
-            LOGGER.log(Level.INFO, "Error create place");
+            LOGGER.log(Level.INFO, "Error create rating");
             LOGGER.log(Level.WARNING, ex.getMessage());
         }
         return null;
     }
 
     @WebMethod
-    public boolean update(Post post){
+    public boolean update(Rating rating){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
-            session.update(post);
+            session.update(rating);
             session.getTransaction().commit();
             session.close();
             return true;
@@ -98,14 +94,13 @@ public class PostService {
     }
 
     @WebMethod
-    public boolean delete(Post post){
+    public boolean delete(Rating rating){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
-            Post existedPost =  session.get(Post.class, post.getId());
-            if(existedPost != null){
-                existedPost.setStatus(0);
-                session.update(existedPost);
+            Rating existedRating =  session.get(Rating.class, rating.getId());
+            if(existedRating != null){
+                session.update(existedRating);
                 session.getTransaction().commit();
                 session.close();
                 return true;

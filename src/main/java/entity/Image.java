@@ -13,9 +13,9 @@ public class Image {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "postId")
     private Post post;
-    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "image", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private Set<Comment> commentSet;
-    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "image", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private Set<Rating> ratingSet;
     private int status;
 
