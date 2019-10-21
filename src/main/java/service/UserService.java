@@ -27,7 +27,8 @@ public class UserService {
 
         UserService userService = new UserService();
 
-        System.out.println(new Gson().toJson(userService.detail(1)));
+        System.out.println(new Gson().toJson(userService.createUser(user)));
+        return;
     }
     @WebMethod
     public boolean createUser(User user) throws InvalidKeySpecException, NoSuchAlgorithmException {
