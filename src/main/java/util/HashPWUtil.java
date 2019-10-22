@@ -29,7 +29,4 @@ public class HashPWUtil {
         System.out.println(strPw);
         return strPw;
     };
-
-    public static void main(String[] args) throws InvalidKeySpecException, NoSuchAlgorithmException {
-    }
 }
