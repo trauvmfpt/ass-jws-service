@@ -1,6 +1,7 @@
 package entity;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -12,9 +13,9 @@ public class Image {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "postId")
     private Post post;
-    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "image", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private Set<Comment> commentSet;
-    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "image", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private Set<Rating> ratingSet;
     private int status;
 
@@ -67,5 +68,12 @@ public class Image {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public void addRating(Rating rating) {
+        if (this.ratingSet == null) {
+            this.ratingSet = new HashSet<Rating>();
+        }
+        this.ratingSet.add(rating);
     }
 }
