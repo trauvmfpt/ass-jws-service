@@ -12,24 +12,13 @@ import javax.jws.WebService;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @WebService
 public class UserService {
+    private static final Logger LOGGER = Logger.getLogger(PostService.class.getName());
 
-    public static void main(String[] args) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        User user = new User();
-        user.setUsername("nguyenhoang24695");
-        user.setEmail("nguyenhoang@gmail.com");
-        user.setPassword("123456");
-        user.setAge(18);
-        user.setGender(1);
-        user.setRole(1);
-
-        UserService userService = new UserService();
-
-        System.out.println(new Gson().toJson(userService.createUser(user)));
-        return;
-    }
     @WebMethod
     public boolean createUser(User user) throws InvalidKeySpecException, NoSuchAlgorithmException {
 //        user.setAddress("Ha Noi");
@@ -41,6 +30,7 @@ public class UserService {
         session.beginTransaction();
         session.save(user);
         session.getTransaction().commit();
+        session.close();
         return true;
     }
     @WebMethod
@@ -53,6 +43,7 @@ public class UserService {
         user.setId(userId);
         session.saveOrUpdate(user);
         session.getTransaction().commit();
+        session.close();
         return true;
     }
     @WebMethod
@@ -61,6 +52,7 @@ public class UserService {
         session.beginTransaction();
         List<User> userList =  session.createCriteria(User.class).list();
         session.getTransaction().commit();
+        session.close();
         return userList;
     }
     @WebMethod
@@ -69,7 +61,29 @@ public class UserService {
         session.beginTransaction();
         User user =  session.get(User.class,userId);
         session.getTransaction().commit();
+        session.close();
         return user;
+    }
+    @WebMethod
+    public boolean delete(User user){
+        try{
+            Session session = HibernateUtil.getSession();
+            session.beginTransaction();
+            Post existedPost =  session.get(Post.class, user.getId());
+            if(existedPost != null){
+                existedPost.setStatus(-1);
+                session.update(existedPost);
+                session.getTransaction().commit();
+                session.close();
+                return true;
+            }
+            return false;
+        }
+        catch (Exception ex){
+            LOGGER.log(Level.INFO, "Error create place");
+            LOGGER.log(Level.WARNING, ex.getMessage());
+        }
+        return false;
     }
 
 }

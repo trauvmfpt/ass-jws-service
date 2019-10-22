@@ -7,12 +7,13 @@ import org.hibernate.Session;
 import util.HibernateUtil;
 
 import javax.jws.WebMethod;
+import javax.jws.WebService;
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+@WebService
 public class RatingService {
     private static final Logger LOGGER = Logger.getLogger(RatingService.class.getName());
 

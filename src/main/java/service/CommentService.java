@@ -20,6 +20,7 @@ public class CommentService {
         session.beginTransaction();
         session.save(comment);
         session.getTransaction().commit();
+        session.close();
         return true;
     }
     @WebMethod
@@ -32,6 +33,7 @@ public class CommentService {
         comment.setId(commentId);
         session.saveOrUpdate(comment);
         session.getTransaction().commit();
+        session.close();
         return true;
     }
     @WebMethod
@@ -40,6 +42,7 @@ public class CommentService {
         session.beginTransaction();
         List<Comment> commentList =  session.createCriteria(Comment.class).list();
         session.getTransaction().commit();
+        session.close();
         return commentList;
     }
     @WebMethod
@@ -48,6 +51,7 @@ public class CommentService {
         session.beginTransaction();
         Comment comment =  session.get(Comment.class,commentId);
         session.getTransaction().commit();
+        session.close();
         return comment;
     }
 

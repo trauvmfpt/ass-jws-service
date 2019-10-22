@@ -6,11 +6,12 @@ import org.hibernate.Session;
 import util.HibernateUtil;
 
 import javax.jws.WebMethod;
+import javax.jws.WebService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+@WebService
 public class ImageService {
     private static final Logger LOGGER = Logger.getLogger(ImageService.class.getName());
 

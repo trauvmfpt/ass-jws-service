@@ -20,6 +20,7 @@ public class PlaceService {
         session.beginTransaction();
         session.save(place);
         session.getTransaction().commit();
+        session.close();
         return true;
     }
     @WebMethod
@@ -32,6 +33,7 @@ public class PlaceService {
         place.setId(placeId);
         session.saveOrUpdate(place);
         session.getTransaction().commit();
+        session.close();
         return true;
     }
     @WebMethod
@@ -40,6 +42,7 @@ public class PlaceService {
         session.beginTransaction();
         List<Place> placeList =  session.createCriteria(Place.class).list();
         session.getTransaction().commit();
+        session.close();
         return placeList;
     }
     @WebMethod
@@ -48,6 +51,7 @@ public class PlaceService {
         session.beginTransaction();
         Place place =  session.get(Place.class,placeId);
         session.getTransaction().commit();
+        session.close();
         return place;
     }
 

@@ -18,10 +18,6 @@ public class SearchService {
     String hql = "";
 
     public static void main(String[] args) {
-        Place place = new Place();
-        place.setAddress("Da Nang A");
-        place.setName("Da Nang A");
-//        new PlaceService().createPlace(place);
         new SearchService().searchByPlace("a");
     }
 
