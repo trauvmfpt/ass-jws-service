@@ -10,7 +10,7 @@ public class Place {
     private int id;
     private String name;
     private String address;
-    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Set<Post> postSet;
     private int status;
 
