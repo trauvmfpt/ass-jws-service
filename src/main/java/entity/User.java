@@ -1,6 +1,7 @@
 package entity;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -12,7 +13,6 @@ public class User {
     private int age;
     private int gender;
     private String address;
-    private int role;
     private String password;
     @Column(unique = true)
     private String email;
@@ -27,6 +27,20 @@ public class User {
     private Set<Comment> commentSet;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Rating> ratingSet;
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @JoinTable(name = "role_user",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "roleId"))
+    private Set<Role> roleSet;
+
+    public Set<Role> getRoleSet() {
+        return roleSet;
+    }
+
+    public void setRoleSet(Set<Role> roleSet) {
+        this.roleSet = roleSet;
+    }
+
     private int status;
 
     public User() {
@@ -70,14 +84,6 @@ public class User {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public int getRole() {
-        return role;
-    }
-
-    public void setRole(int role) {
-        this.role = role;
     }
 
     public String getPassword() {
@@ -150,5 +156,12 @@ public class User {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public void addRole(Role role) {
+        if (this.roleSet == null) {
+            this.roleSet = new HashSet<>();
+        }
+        this.roleSet.add(role);
     }
 }

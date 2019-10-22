@@ -10,20 +10,34 @@ import java.security.spec.InvalidKeySpecException;
 public class Seeder {
     public static void main(String[] args) throws InvalidKeySpecException, NoSuchAlgorithmException {
         userSeeder();
-
-
-
     }
+
     private static void userSeeder() throws InvalidKeySpecException, NoSuchAlgorithmException{
+        UserService userService = new UserService();
+        // tao user
+//        User user = new User();
+//        user.setUsername("user01");
+//        user.setEmail("user01@gmail.com");
+//        user.setPassword("123456");
+//        user.setAge(18);
+//        user.setGender(1);
+//        int[] roleIds = {1,3};
+//        System.out.println(new Gson().toJson(userService.createUser(user, roleIds)));
+
+        // update user
+//        User user = userService.detail(2);
+//        user.setAddress("asdfasdf");
+//        user.setName("asdfasdfa");
+//        user.getRoleSet().clear();
+//        int[] roleIds = {1};
+//        userService.updateUser(user,roleIds);
+
+        //login
         User user = new User();
         user.setUsername("user01");
-        user.setEmail("user01@gmail.com");
         user.setPassword("123456");
-        user.setAge(18);
-        user.setGender(1);
-        user.setRole(1);
-        UserService userService = new UserService();
-        System.out.println(new Gson().toJson(userService.createUser(user)));
+        User user2 = userService.login(user);
+        System.out.println(user2.getToken());
     }
     private static void placeSeeder(){
         Place place = new Place();

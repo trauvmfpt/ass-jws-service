@@ -31,5 +31,6 @@
         <mapping class="entity.Rating" />
         <mapping class="entity.User" />
         <mapping class="entity.Post" />
+        <mapping class="entity.Role" />
     </session-factory>
 </hibernate-configuration>
