@@ -1,6 +1,6 @@
 package service;
 
-import entity.Place;
+import entity.Comment;
 import org.hibernate.Session;
 import util.HibernateUtil;
 
@@ -9,46 +9,46 @@ import javax.jws.WebService;
 import java.util.List;
 
 @WebService
-public class PlaceService {
+public class CommentService {
 
     @WebMethod
-    public boolean createPlace(Place place){
-//        place.setAddress("Ha Noi");
-//        place.setName("Ha Noi");
-        place.setStatus(1);
+    public boolean createComment(Comment comment){
+//        comment.setAddress("Ha Noi");
+//        comment.setName("Ha Noi");
+        comment.setStatus(1);
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
-        session.save(place);
+        session.save(comment);
         session.getTransaction().commit();
         return true;
     }
     @WebMethod
-    public boolean updatePlace(Place place, int placeId){
-//        place.setAddress("Ha Noi");
-//        place.setName("Ha Noi");
-        place.setStatus(1);
+    public boolean updateComment(Comment comment, int commentId){
+//        comment.setAddress("Ha Noi");
+//        comment.setName("Ha Noi");
+        comment.setStatus(1);
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
-        place.setId(placeId);
-        session.saveOrUpdate(place);
+        comment.setId(commentId);
+        session.saveOrUpdate(comment);
         session.getTransaction().commit();
         return true;
     }
     @WebMethod
-    public List<Place> getList(){
+    public List<Comment> getList(){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
-        List<Place> placeList =  session.createCriteria(Place.class).list();
+        List<Comment> commentList =  session.createCriteria(Comment.class).list();
         session.getTransaction().commit();
-        return placeList;
+        return commentList;
     }
     @WebMethod
-    public Place detail(int placeId){
+    public Comment detail(int commentId){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
-        Place place =  session.get(Place.class,placeId);
+        Comment comment =  session.get(Comment.class,commentId);
         session.getTransaction().commit();
-        return place;
+        return comment;
     }
 
 }
