@@ -1,7 +1,7 @@
 package service;
 
 import com.google.gson.Gson;
-import entity.Comment;
+
 import entity.Place;
 import entity.Post;
 import org.hibernate.Session;

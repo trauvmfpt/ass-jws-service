@@ -18,7 +18,7 @@ public class RatingService {
     private static final Logger LOGGER = Logger.getLogger(RatingService.class.getName());
 
     @WebMethod
-    public boolean create(Rating rating){
+    public boolean createRate(Rating rating){
         if(rating != null){
             try{
                 Session session = HibernateUtil.getSession();
@@ -38,7 +38,7 @@ public class RatingService {
     }
 
     @WebMethod
-    public List<Rating> getAll(){
+    public List<Rating> getAllRate(){
         List<Rating> ratingList = new ArrayList<Rating>();
         try{
             Session session = HibernateUtil.getSession();
@@ -78,7 +78,7 @@ public class RatingService {
     }
 
     @WebMethod
-    public boolean update(Rating rating){
+    public boolean updateRate(Rating rating){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
@@ -95,7 +95,7 @@ public class RatingService {
     }
 
     @WebMethod
-    public boolean delete(Rating rating){
+    public boolean deleteRate(Rating rating){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();

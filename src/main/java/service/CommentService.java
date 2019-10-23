@@ -37,7 +37,7 @@ public class CommentService {
         return true;
     }
     @WebMethod
-    public List<Comment> getList(){
+    public List<Comment> getListComment(){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         List<Comment> commentList =  session.createCriteria(Comment.class).list();
@@ -46,7 +46,7 @@ public class CommentService {
         return commentList;
     }
     @WebMethod
-    public Comment detail(int commentId){
+    public Comment detailComment(int commentId){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         Comment comment =  session.get(Comment.class,commentId);

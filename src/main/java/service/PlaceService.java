@@ -37,7 +37,7 @@ public class PlaceService {
         return true;
     }
     @WebMethod
-    public List<Place> getList(){
+    public List<Place> getListPlace(){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         List<Place> placeList =  session.createCriteria(Place.class).list();
@@ -46,7 +46,7 @@ public class PlaceService {
         return placeList;
     }
     @WebMethod
-    public Place detail(int placeId){
+    public Place detailPlace(int placeId){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         Place place =  session.get(Place.class,placeId);
