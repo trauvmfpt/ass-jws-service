@@ -25,6 +25,8 @@ public class UserService {
     @WebMethod
     public boolean createUser(User user, int[] roleIds) throws InvalidKeySpecException, NoSuchAlgorithmException {
         user.setStatus(1);
+        user.setSalt(HashPWUtil.generateSalt());
+        user.setPassword(HashPWUtil.hashPW(user.getPassword(),user.getSalt()));
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
@@ -90,15 +92,6 @@ public class UserService {
         user.setPostSet(null);
         user.setRatingSet(null);
         user.setRoleSet(null);
-        return user;
-    }
-    @WebMethod
-    public User getByUserName(String username ){
-        Session session = HibernateUtil.getSession();
-        session.beginTransaction();
-        String sqlQuery = "select u from User u where u.username = :username";
-        User user =  session.createQuery(sqlQuery, User.class).setParameter("username", username).getSingleResult();
-        session.close();
         return user;
     }
     @WebMethod
