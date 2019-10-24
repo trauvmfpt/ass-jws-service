@@ -43,6 +43,13 @@ public class CommentService {
         List<Comment> commentList =  session.createCriteria(Comment.class).list();
         session.getTransaction().commit();
         session.close();
+        for (Comment comment: commentList
+             ) {
+            comment.setImage(null);
+            comment.setPost(null);
+            comment.setContent(null);
+            comment.setUser(null);
+        }
         return commentList;
     }
     @WebMethod
@@ -52,6 +59,10 @@ public class CommentService {
         Comment comment =  session.get(Comment.class,commentId);
         session.getTransaction().commit();
         session.close();
+        comment.setImage(null);
+        comment.setPost(null);
+        comment.setContent(null);
+        comment.setUser(null);
         return comment;
     }
 

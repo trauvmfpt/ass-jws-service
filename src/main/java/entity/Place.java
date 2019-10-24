@@ -1,5 +1,7 @@
 package entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -11,6 +13,7 @@ public class Place {
     private String name;
     private String address;
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JsonManagedReference
     private Set<Post> postSet;
     private int status;
 

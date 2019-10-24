@@ -45,6 +45,12 @@ public class ImageService {
             imageList =  session.createQuery("from Image ", Image.class).list();
             session.close();
             if(imageList != null){
+                for (Image image: imageList
+                     ) {
+                    image.setPost(null);
+                    image.setCommentSet(null);
+                    image.setRatingSet(null);
+                }
                 return imageList;
             }
             return null;
@@ -64,6 +70,9 @@ public class ImageService {
             Image image =  session.get(Image.class, imageId);
             session.close();
             if(image != null){
+                image.setPost(null);
+                image.setCommentSet(null);
+                image.setRatingSet(null);
                 return image;
             }
             return null;

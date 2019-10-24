@@ -1,5 +1,9 @@
 package entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,15 +16,24 @@ public class Post {
     private String info;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "userId")
+    @JsonIgnore
     private User user;
+
+    @JsonIgnore
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "placeId")
     private Place place;
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "post", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Image> imageSet;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "post", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+
+    @JsonIgnore
     private Set<Comment> commentSet;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "post", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+
+    @JsonIgnore
     private Set<Rating> ratingSet;
     private int status;
 

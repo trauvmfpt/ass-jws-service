@@ -46,6 +46,12 @@ public class RatingService {
             ratingList =  session.createQuery("from Rating ", Rating.class).list();
             session.close();
             if(ratingList != null){
+                for (Rating rating:ratingList
+                     ) {
+                    rating.setImage(null);
+                    rating.setPost(null);
+                    rating.setUser(null);
+                }
                 return ratingList;
             }
             return null;
@@ -66,6 +72,9 @@ public class RatingService {
             Rating rating =  session.createQuery(sqlQuery, Rating.class).setParameter("userId", userId).setParameter("postId", postId).getSingleResult();
             session.close();
             if(rating != null){
+                rating.setImage(null);
+                rating.setPost(null);
+                rating.setUser(null);
                 return rating;
             }
             return null;

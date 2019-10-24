@@ -43,6 +43,10 @@ public class PlaceService {
         List<Place> placeList =  session.createCriteria(Place.class).list();
         session.getTransaction().commit();
         session.close();
+        for (Place place:placeList
+             ) {
+            place.setPostSet(null);
+        }
         return placeList;
     }
     @WebMethod
@@ -52,6 +56,7 @@ public class PlaceService {
         Place place =  session.get(Place.class,placeId);
         session.getTransaction().commit();
         session.close();
+        place.setPostSet(null);
         return place;
     }
 

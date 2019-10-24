@@ -50,6 +50,13 @@ public class PostService {
             postList =  session.createQuery("from Post ", Post.class).list();
             session.close();
             if(postList != null){
+                for (Post post: postList
+                     ) {
+                    post.setRatingSet(null);
+                    post.setCommentSet(null);
+                    post.setImageSet(null);
+                    post.getPlace().setPostSet(null);
+                }
                 return postList;
             }
             return null;
@@ -69,6 +76,10 @@ public class PostService {
             Post post =  session.get(Post.class, postId);
             session.close();
             if(post != null){
+                post.setRatingSet(null);
+                post.setCommentSet(null);
+                post.setImageSet(null);
+                post.getPlace().setPostSet(null);
                 return post;
             }
             return null;
