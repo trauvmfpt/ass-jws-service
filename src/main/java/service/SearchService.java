@@ -1,7 +1,7 @@
 package service;
 
 import com.google.gson.Gson;
-import entity.Comment;
+
 import entity.Place;
 import entity.Post;
 import org.hibernate.Session;
@@ -25,14 +25,25 @@ public class SearchService {
     public List<Place> searchByPlace(String key) {
         hql = "FROM Place P WHERE P.name LIKE '%" + key + "%' OR P.address like '%" + key + "%'";
         List<Place> placeList = (List<Place>)QuerySearch(hql);
-        System.out.println(new Gson().toJson(placeList));
+        for (Place p:placeList
+             ) {
+            p.setPostSet(null);
+        }
+//        System.out.println(new Gson().toJson(placeList));
         return placeList;
     }
     @WebMethod
     public List<Post> searchByPost(String key) {
         hql = "FROM Post P WHERE P.info LIKE '%" + key + "%'";
         List<Post> postList = (List<Post>)QuerySearch(hql);
-        System.out.println(new Gson().toJson(postList));
+        for (Post p:postList
+             ) {
+            p.getPlace().setPostSet(null);
+            p.setImageSet(null);
+            p.setCommentSet(null);
+            p.setRatingSet(null);
+
+        }
         return postList;
     }
 

@@ -9,7 +9,7 @@ import java.security.spec.InvalidKeySpecException;
 
 public class Seeder {
     public static void main(String[] args) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        userSeeder();
+        placeSeeder();
     }
 
     private static void userSeeder() throws InvalidKeySpecException, NoSuchAlgorithmException{

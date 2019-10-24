@@ -17,7 +17,7 @@ public class PostService {
     private static final Logger LOGGER = Logger.getLogger(PostService.class.getName());
 
     @WebMethod
-    public boolean create(Post post){
+    public boolean createPost(Post post){
         if(post != null){
             for (Image image :
                     post.getImageSet()) {
@@ -42,7 +42,7 @@ public class PostService {
     }
 
     @WebMethod
-    public List<Post> getAll(){
+    public List<Post> getAllPost(){
         List<Post> postList = new ArrayList<Post>();
         try{
             Session session = HibernateUtil.getSession();
@@ -50,6 +50,13 @@ public class PostService {
             postList =  session.createQuery("from Post ", Post.class).list();
             session.close();
             if(postList != null){
+                for (Post post: postList
+                     ) {
+                    post.setRatingSet(null);
+                    post.setCommentSet(null);
+                    post.setImageSet(null);
+                    post.getPlace().setPostSet(null);
+                }
                 return postList;
             }
             return null;
@@ -62,13 +69,17 @@ public class PostService {
     }
 
     @WebMethod
-    public Post getById(int postId){
+    public Post getByIdPost(int postId){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
             Post post =  session.get(Post.class, postId);
             session.close();
             if(post != null){
+                post.setRatingSet(null);
+                post.setCommentSet(null);
+                post.setImageSet(null);
+                post.getPlace().setPostSet(null);
                 return post;
             }
             return null;
@@ -81,7 +92,7 @@ public class PostService {
     }
 
     @WebMethod
-    public boolean update(Post post){
+    public boolean updatePost(Post post){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
@@ -98,7 +109,7 @@ public class PostService {
     }
 
     @WebMethod
-    public boolean delete(Post post){
+    public boolean deletePost(Post post){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
