@@ -16,7 +16,7 @@ public class ImageService {
     private static final Logger LOGGER = Logger.getLogger(ImageService.class.getName());
 
     @WebMethod
-    public boolean create(Image image){
+    public boolean createImage(Image image){
         if(image != null){
             image.setStatus(1);
             try{
@@ -37,7 +37,7 @@ public class ImageService {
     }
 
     @WebMethod
-    public List<Image> getAll(){
+    public List<Image> getAllImage(){
         List<Image> imageList = new ArrayList<Image>();
         try{
             Session session = HibernateUtil.getSession();
@@ -45,6 +45,12 @@ public class ImageService {
             imageList =  session.createQuery("from Image ", Image.class).list();
             session.close();
             if(imageList != null){
+                for (Image image: imageList
+                     ) {
+                    image.setPost(null);
+                    image.setCommentSet(null);
+                    image.setRatingSet(null);
+                }
                 return imageList;
             }
             return null;
@@ -57,13 +63,16 @@ public class ImageService {
     }
 
     @WebMethod
-    public Image getById(int imageId){
+    public Image getByIdImage(int imageId){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
             Image image =  session.get(Image.class, imageId);
             session.close();
             if(image != null){
+                image.setPost(null);
+                image.setCommentSet(null);
+                image.setRatingSet(null);
                 return image;
             }
             return null;
@@ -76,7 +85,7 @@ public class ImageService {
     }
 
     @WebMethod
-    public boolean update(Image image){
+    public boolean updateImage(Image image){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
@@ -93,7 +102,7 @@ public class ImageService {
     }
 
     @WebMethod
-    public boolean delete(Image image){
+    public boolean deleteImage(Image image){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();

@@ -37,21 +37,32 @@ public class CommentService {
         return true;
     }
     @WebMethod
-    public List<Comment> getList(){
+    public List<Comment> getListComment(){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         List<Comment> commentList =  session.createCriteria(Comment.class).list();
         session.getTransaction().commit();
         session.close();
+        for (Comment comment: commentList
+             ) {
+            comment.setImage(null);
+            comment.setPost(null);
+            comment.setContent(null);
+            comment.setUser(null);
+        }
         return commentList;
     }
     @WebMethod
-    public Comment detail(int commentId){
+    public Comment detailComment(int commentId){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         Comment comment =  session.get(Comment.class,commentId);
         session.getTransaction().commit();
         session.close();
+        comment.setImage(null);
+        comment.setPost(null);
+        comment.setContent(null);
+        comment.setUser(null);
         return comment;
     }
 

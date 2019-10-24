@@ -33,6 +33,9 @@ public class MainDiduduadi {
         //
         Endpoint imageEndpoint = Endpoint.create(new ImageService());
         imageEndpoint.publish(httpServer.createContext("/image"));
+        //
+        Endpoint postEndpoint = Endpoint.create(new PostService());
+        postEndpoint.publish(httpServer.createContext("/post"));
         httpServer.start();
         System.out.println("Services run on port: 9000");
     }

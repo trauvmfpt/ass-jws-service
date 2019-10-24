@@ -71,6 +71,14 @@ public class UserService {
         List<User> userList =  session.createQuery("from User ", User.class).list();
         session.getTransaction().commit();
         session.close();
+        for (User user:userList
+             ) {
+            user.setCommentSet(null);
+            user.setPostSet(null);
+            user.setRatingSet(null);
+            user.setRoleSet(null);
+
+        }
         return userList;
     }
     @WebMethod
@@ -80,6 +88,10 @@ public class UserService {
         User user =  session.get(User.class,userId);
         session.getTransaction().commit();
         session.close();
+        user.setCommentSet(null);
+        user.setPostSet(null);
+        user.setRatingSet(null);
+        user.setRoleSet(null);
         return user;
     }
     @WebMethod
@@ -118,6 +130,10 @@ public class UserService {
                         existedUser.setToken(UUID.randomUUID().toString());
                         session.saveOrUpdate(existedUser);
                         session.close();
+                        existedUser.setCommentSet(null);
+                        existedUser.setPostSet(null);
+                        existedUser.setRatingSet(null);
+                        existedUser.setRoleSet(null);
                         return existedUser;
                     }
                 }
