@@ -1,5 +1,6 @@
 package service;
 
+import dto.ImageDTO;
 import entity.Image;
 import entity.Image;
 import org.hibernate.Session;
@@ -37,7 +38,7 @@ public class ImageService {
     }
 
     @WebMethod
-    public List<Image> getAllImage(){
+    public List<ImageDTO> getAllImage(){
         List<Image> imageList = new ArrayList<Image>();
         try{
             Session session = HibernateUtil.getSession();
@@ -45,13 +46,12 @@ public class ImageService {
             imageList =  session.createQuery("from Image ", Image.class).list();
             session.close();
             if(imageList != null){
+                List<ImageDTO> imageDTOS = new ArrayList<>();
                 for (Image image: imageList
                      ) {
-                    image.setPost(null);
-                    image.setCommentSet(null);
-                    image.setRatingSet(null);
+                    imageDTOS.add(new ImageDTO(image));
                 }
-                return imageList;
+                return imageDTOS;
             }
             return null;
         }
@@ -63,17 +63,15 @@ public class ImageService {
     }
 
     @WebMethod
-    public Image getByIdImage(int imageId){
+    public Object getByIdImage(int imageId){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
             Image image =  session.get(Image.class, imageId);
             session.close();
             if(image != null){
-                image.setPost(null);
-                image.setCommentSet(null);
-                image.setRatingSet(null);
-                return image;
+
+                return new ImageDTO(image);
             }
             return null;
         }

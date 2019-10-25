@@ -1,11 +1,13 @@
 package service;
 
+import dto.CommentDTO;
 import entity.Comment;
 import org.hibernate.Session;
 import util.HibernateUtil;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebService
@@ -37,33 +39,29 @@ public class CommentService {
         return true;
     }
     @WebMethod
-    public List<Comment> getListComment(){
+    public List<CommentDTO> getListComment(){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         List<Comment> commentList =  session.createCriteria(Comment.class).list();
         session.getTransaction().commit();
         session.close();
-        for (Comment comment: commentList
+        List<CommentDTO> commentDTOS = new ArrayList<>();
+        for (Comment comment:commentList
              ) {
-            comment.setImage(null);
-            comment.setPost(null);
-            comment.setContent(null);
-            comment.setUser(null);
+            commentDTOS.add(new CommentDTO(comment));
         }
-        return commentList;
+
+        return commentDTOS;
     }
     @WebMethod
-    public Comment detailComment(int commentId){
+    public Object detailComment(int commentId){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         Comment comment =  session.get(Comment.class,commentId);
         session.getTransaction().commit();
         session.close();
-        comment.setImage(null);
-        comment.setPost(null);
-        comment.setContent(null);
-        comment.setUser(null);
-        return comment;
+        CommentDTO commentDTO = new CommentDTO(comment);
+        return commentDTO;
     }
 
 }

@@ -1,5 +1,6 @@
 package service;
 
+import dto.RatingDTO;
 import entity.Image;
 import entity.Rating;
 import org.hibernate.Criteria;
@@ -38,7 +39,7 @@ public class RatingService {
     }
 
     @WebMethod
-    public List<Rating> getAllRate(){
+    public List<RatingDTO> getAllRate(){
         List<Rating> ratingList = new ArrayList<Rating>();
         try{
             Session session = HibernateUtil.getSession();
@@ -46,13 +47,12 @@ public class RatingService {
             ratingList =  session.createQuery("from Rating ", Rating.class).list();
             session.close();
             if(ratingList != null){
+                List<RatingDTO> ratingDTOS = new ArrayList<>();
                 for (Rating rating:ratingList
                      ) {
-                    rating.setImage(null);
-                    rating.setPost(null);
-                    rating.setUser(null);
+                    ratingDTOS.add(new RatingDTO(rating));
                 }
-                return ratingList;
+                return ratingDTOS;
             }
             return null;
         }
@@ -64,7 +64,7 @@ public class RatingService {
     }
 
     @WebMethod
-    public Rating getByUserIdAndPostId(int userId, int postId){
+    public Object getByUserIdAndPostId(int userId, int postId){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
@@ -72,10 +72,7 @@ public class RatingService {
             Rating rating =  session.createQuery(sqlQuery, Rating.class).setParameter("userId", userId).setParameter("postId", postId).getSingleResult();
             session.close();
             if(rating != null){
-                rating.setImage(null);
-                rating.setPost(null);
-                rating.setUser(null);
-                return rating;
+                return new RatingDTO(rating);
             }
             return null;
         }

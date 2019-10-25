@@ -1,11 +1,13 @@
 package service;
 
+import dto.PlaceDTO;
 import entity.Place;
 import org.hibernate.Session;
 import util.HibernateUtil;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebService
@@ -37,27 +39,28 @@ public class PlaceService {
         return true;
     }
     @WebMethod
-    public List<Place> getListPlace(){
+    public List<PlaceDTO> getListPlace(){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         List<Place> placeList =  session.createCriteria(Place.class).list();
         session.getTransaction().commit();
         session.close();
+        List<PlaceDTO> placeDTOS = new ArrayList<>();
         for (Place place:placeList
              ) {
-            place.setPostSet(null);
+            placeDTOS.add(new PlaceDTO(place));
         }
-        return placeList;
+        return placeDTOS;
     }
     @WebMethod
-    public Place detailPlace(int placeId){
+    public Object detailPlace(int placeId){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         Place place =  session.get(Place.class,placeId);
         session.getTransaction().commit();
         session.close();
-        place.setPostSet(null);
-        return place;
+
+        return new PlaceDTO(place);
     }
 
 }

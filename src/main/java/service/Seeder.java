@@ -9,7 +9,8 @@ import java.security.spec.InvalidKeySpecException;
 
 public class Seeder {
     public static void main(String[] args) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        placeSeeder();
+//        placeSeeder();
+        System.out.println(new Gson().toJson(new SearchService().searchByPost("a")));
     }
 
     private static void userSeeder() throws InvalidKeySpecException, NoSuchAlgorithmException{

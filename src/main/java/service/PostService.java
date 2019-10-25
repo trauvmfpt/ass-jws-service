@@ -1,5 +1,6 @@
 package service;
 
+import dto.PostDTO;
 import entity.Image;
 import entity.Post;
 import org.hibernate.Session;
@@ -42,7 +43,7 @@ public class PostService {
     }
 
     @WebMethod
-    public List<Post> getAllPost(){
+    public List<PostDTO> getAllPost(){
         List<Post> postList = new ArrayList<Post>();
         try{
             Session session = HibernateUtil.getSession();
@@ -50,14 +51,12 @@ public class PostService {
             postList =  session.createQuery("from Post ", Post.class).list();
             session.close();
             if(postList != null){
+                List<PostDTO> postDTOS = new ArrayList<>();
                 for (Post post: postList
                      ) {
-                    post.setRatingSet(null);
-                    post.setCommentSet(null);
-                    post.setImageSet(null);
-                    post.getPlace().setPostSet(null);
+                   postDTOS.add(new PostDTO(post));
                 }
-                return postList;
+                return postDTOS;
             }
             return null;
         }
@@ -69,18 +68,15 @@ public class PostService {
     }
 
     @WebMethod
-    public Post getByIdPost(int postId){
+    public Object getByIdPost(int postId){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
             Post post =  session.get(Post.class, postId);
             session.close();
             if(post != null){
-                post.setRatingSet(null);
-                post.setCommentSet(null);
-                post.setImageSet(null);
-                post.getPlace().setPostSet(null);
-                return post;
+
+                return new PostDTO(post);
             }
             return null;
         }

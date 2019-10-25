@@ -1,6 +1,7 @@
 package service;
 
 import com.google.gson.Gson;
+import dto.UserDTO;
 import entity.Post;
 import entity.Rating;
 import entity.Role;
@@ -13,6 +14,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -65,34 +67,28 @@ public class UserService {
         }
     }
     @WebMethod
-    public List<User> getList(){
+    public List<UserDTO> getList(){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         List<User> userList =  session.createQuery("from User ", User.class).list();
         session.getTransaction().commit();
         session.close();
+        List<UserDTO> userDTOS = new ArrayList<>();
         for (User user:userList
              ) {
-            user.setCommentSet(null);
-            user.setPostSet(null);
-            user.setRatingSet(null);
-            user.setRoleSet(null);
-
+            userDTOS.add(new UserDTO(user));
         }
-        return userList;
+        return userDTOS;
     }
     @WebMethod
-    public User detail(int userId){
+    public Object detail(int userId){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         User user =  session.get(User.class,userId);
         session.getTransaction().commit();
         session.close();
-        user.setCommentSet(null);
-        user.setPostSet(null);
-        user.setRatingSet(null);
-        user.setRoleSet(null);
-        return user;
+
+        return new UserDTO(user);
     }
     @WebMethod
     public boolean delete(User user){

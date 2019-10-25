@@ -2,6 +2,8 @@ package service;
 
 import com.google.gson.Gson;
 
+import dto.PlaceDTO;
+import dto.PostDTO;
 import entity.Place;
 import entity.Post;
 import org.hibernate.Session;
@@ -10,6 +12,7 @@ import util.HibernateUtil;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,29 +25,28 @@ public class SearchService {
     }
 
     @WebMethod
-    public List<Place> searchByPlace(String key) {
+    public List<PlaceDTO> searchByPlace(String key) {
         hql = "FROM Place P WHERE P.name LIKE '%" + key + "%' OR P.address like '%" + key + "%'";
         List<Place> placeList = (List<Place>)QuerySearch(hql);
+        List<PlaceDTO> placeDTOS = new ArrayList<>();
         for (Place p:placeList
              ) {
-            p.setPostSet(null);
+            placeDTOS.add(new PlaceDTO(p));
         }
 //        System.out.println(new Gson().toJson(placeList));
-        return placeList;
+        return placeDTOS;
     }
     @WebMethod
-    public List<Post> searchByPost(String key) {
+    public List<PostDTO> searchByPost(String key) {
         hql = "FROM Post P WHERE P.info LIKE '%" + key + "%'";
         List<Post> postList = (List<Post>)QuerySearch(hql);
+        List<PostDTO> postDTOS = new ArrayList<>();
         for (Post p:postList
              ) {
-            p.getPlace().setPostSet(null);
-            p.setImageSet(null);
-            p.setCommentSet(null);
-            p.setRatingSet(null);
+            postDTOS.add(new PostDTO(p));
 
         }
-        return postList;
+        return postDTOS;
     }
 
     private Object QuerySearch(String hql) {
