@@ -10,7 +10,9 @@ import java.security.spec.InvalidKeySpecException;
 public class Seeder {
     public static void main(String[] args) throws InvalidKeySpecException, NoSuchAlgorithmException {
 //        placeSeeder();
-        System.out.println(new Gson().toJson(new SearchService().searchByPost("a")));
+//        System.out.println(new Gson().toJson(new SearchService().searchByPost("a")));
+//        System.out.println(new Gson().toJson(new PlaceService().getListPlace()));
+        System.out.println(new Gson().toJson(new UserService().getByUserName("cheatmo3")));
     }
 
     private static void userSeeder() throws InvalidKeySpecException, NoSuchAlgorithmException{
@@ -37,30 +39,30 @@ public class Seeder {
         User user = new User();
         user.setUsername("user01");
         user.setPassword("123456");
-        User user2 = userService.login(user);
+        User user2 = new Gson().fromJson(userService.login(new Gson().toJson(user)),User.class);
         System.out.println(user2.getToken());
     }
     private static void placeSeeder(){
         Place place = new Place();
         place.setAddress("Dragon Bridge");
         place.setName("Da Nang");
-        new PlaceService().createPlace(place);
+        new PlaceService().createPlace(new Gson().toJson(place));
         //
         place.setAddress("BaNa Hill");
         place.setName("Da Nang");
-        new PlaceService().createPlace(place);
+        new PlaceService().createPlace(new Gson().toJson(place));
         //
         place.setAddress("Old Street");
         place.setName("Hoi An");
-        new PlaceService().createPlace(place);
+        new PlaceService().createPlace(new Gson().toJson(place));
         //
         place.setAddress("Guom Lake");
         place.setName("Ha Noi");
-        new PlaceService().createPlace(place);
+        new PlaceService().createPlace(new Gson().toJson(place));
         //
         place.setAddress("Le Thi Rieng Park");
         place.setName("Ho Chi Minh City");
-        new PlaceService().createPlace(place);
+        new PlaceService().createPlace(new Gson().toJson(place));
     }
     private static void postSeeder(){
 

@@ -1,5 +1,6 @@
 package service;
 
+import com.google.gson.Gson;
 import dto.RatingDTO;
 import entity.Image;
 import entity.Rating;
@@ -19,7 +20,8 @@ public class RatingService {
     private static final Logger LOGGER = Logger.getLogger(RatingService.class.getName());
 
     @WebMethod
-    public boolean createRate(Rating rating){
+    public boolean createRate(String ratingObj){
+        Rating rating = new Gson().fromJson(ratingObj,Rating.class);
         if(rating != null){
             try{
                 Session session = HibernateUtil.getSession();
@@ -39,7 +41,7 @@ public class RatingService {
     }
 
     @WebMethod
-    public List<RatingDTO> getAllRate(){
+    public String getAllRate(){
         List<Rating> ratingList = new ArrayList<Rating>();
         try{
             Session session = HibernateUtil.getSession();
@@ -52,7 +54,7 @@ public class RatingService {
                      ) {
                     ratingDTOS.add(new RatingDTO(rating));
                 }
-                return ratingDTOS;
+                return new Gson().toJson(ratingDTOS);
             }
             return null;
         }
@@ -64,7 +66,7 @@ public class RatingService {
     }
 
     @WebMethod
-    public Object getByUserIdAndPostId(int userId, int postId){
+    public String getByUserIdAndPostId(int userId, int postId){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
@@ -72,7 +74,7 @@ public class RatingService {
             Rating rating =  session.createQuery(sqlQuery, Rating.class).setParameter("userId", userId).setParameter("postId", postId).getSingleResult();
             session.close();
             if(rating != null){
-                return new RatingDTO(rating);
+                return new Gson().toJson(new RatingDTO(rating));
             }
             return null;
         }
@@ -84,7 +86,8 @@ public class RatingService {
     }
 
     @WebMethod
-    public boolean updateRate(Rating rating){
+    public boolean updateRate(String ratingObj){
+        Rating rating = new Gson().fromJson(ratingObj,Rating.class);
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
@@ -101,7 +104,8 @@ public class RatingService {
     }
 
     @WebMethod
-    public boolean deleteRate(Rating rating){
+    public boolean deleteRate(String ratingObj){
+        Rating rating = new Gson().fromJson(ratingObj,Rating.class);
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();

@@ -1,8 +1,10 @@
 package service;
 
+import com.google.gson.Gson;
 import dto.PostDTO;
 import entity.Image;
 import entity.Post;
+import javafx.geometry.Pos;
 import org.hibernate.Session;
 import util.HibernateUtil;
 
@@ -18,8 +20,9 @@ public class PostService {
     private static final Logger LOGGER = Logger.getLogger(PostService.class.getName());
 
     @WebMethod
-    public boolean createPost(Post post){
-        if(post != null){
+    public boolean createPost(String postObj){
+        if(postObj != null){
+            Post post = new Gson().fromJson(postObj, Post.class);
             for (Image image :
                     post.getImageSet()) {
                 image.setPost(post);
@@ -43,7 +46,7 @@ public class PostService {
     }
 
     @WebMethod
-    public List<PostDTO> getAllPost(){
+    public String getAllPost(){
         List<Post> postList = new ArrayList<Post>();
         try{
             Session session = HibernateUtil.getSession();
@@ -56,7 +59,7 @@ public class PostService {
                      ) {
                    postDTOS.add(new PostDTO(post));
                 }
-                return postDTOS;
+                return new Gson().toJson(postDTOS);
             }
             return null;
         }
@@ -68,7 +71,7 @@ public class PostService {
     }
 
     @WebMethod
-    public Object getByIdPost(int postId){
+    public String getByIdPost(int postId){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
@@ -76,7 +79,7 @@ public class PostService {
             session.close();
             if(post != null){
 
-                return new PostDTO(post);
+                return new Gson().toJson(new PostDTO(post));
             }
             return null;
         }
@@ -88,7 +91,8 @@ public class PostService {
     }
 
     @WebMethod
-    public boolean updatePost(Post post){
+    public boolean updatePost(String postObj){
+        Post post = new Gson().fromJson(postObj,Post.class);
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
@@ -105,7 +109,8 @@ public class PostService {
     }
 
     @WebMethod
-    public boolean deletePost(Post post){
+    public boolean deletePost(String postObj){
+        Post post = new Gson().fromJson(postObj,Post.class);
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();

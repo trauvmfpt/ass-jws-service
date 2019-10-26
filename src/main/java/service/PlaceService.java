@@ -1,5 +1,6 @@
 package service;
 
+import com.google.gson.Gson;
 import dto.PlaceDTO;
 import entity.Place;
 import org.hibernate.Session;
@@ -14,7 +15,8 @@ import java.util.List;
 public class PlaceService {
 
     @WebMethod
-    public boolean createPlace(Place place){
+    public boolean createPlace(String placeObj){
+        Place place = new Gson().fromJson(placeObj,Place.class);
 //        place.setAddress("Ha Noi");
 //        place.setName("Ha Noi");
         place.setStatus(1);
@@ -26,7 +28,8 @@ public class PlaceService {
         return true;
     }
     @WebMethod
-    public boolean updatePlace(Place place, int placeId){
+    public boolean updatePlace(String placeObj, int placeId){
+        Place place = new Gson().fromJson(placeObj,Place.class);
 //        place.setAddress("Ha Noi");
 //        place.setName("Ha Noi");
         place.setStatus(1);
@@ -39,28 +42,28 @@ public class PlaceService {
         return true;
     }
     @WebMethod
-    public List<PlaceDTO> getListPlace(){
+    public String getListPlace(){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         List<Place> placeList =  session.createCriteria(Place.class).list();
         session.getTransaction().commit();
         session.close();
-        List<PlaceDTO> placeDTOS = new ArrayList<>();
+        List<Object> placeDTOS = new ArrayList<>();
         for (Place place:placeList
              ) {
             placeDTOS.add(new PlaceDTO(place));
         }
-        return placeDTOS;
+        return new Gson().toJson(placeDTOS);
     }
     @WebMethod
-    public Object detailPlace(int placeId){
+    public String detailPlace(int placeId){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         Place place =  session.get(Place.class,placeId);
         session.getTransaction().commit();
         session.close();
 
-        return new PlaceDTO(place);
+        return new Gson().toJson(new PlaceDTO(place));
     }
 
 }

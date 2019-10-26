@@ -21,11 +21,12 @@ public class SearchService {
     String hql = "";
 
     public static void main(String[] args) {
-        new SearchService().searchByPlace("a");
+        System.out.println(new Gson().toJson(new SearchService().searchByPost("a")));
+
     }
 
     @WebMethod
-    public List<PlaceDTO> searchByPlace(String key) {
+    public String searchByPlace(String key) {
         hql = "FROM Place P WHERE P.name LIKE '%" + key + "%' OR P.address like '%" + key + "%'";
         List<Place> placeList = (List<Place>)QuerySearch(hql);
         List<PlaceDTO> placeDTOS = new ArrayList<>();
@@ -34,10 +35,10 @@ public class SearchService {
             placeDTOS.add(new PlaceDTO(p));
         }
 //        System.out.println(new Gson().toJson(placeList));
-        return placeDTOS;
+        return new Gson().toJson(placeDTOS);
     }
     @WebMethod
-    public List<PostDTO> searchByPost(String key) {
+    public String searchByPost(String key) {
         hql = "FROM Post P WHERE P.info LIKE '%" + key + "%'";
         List<Post> postList = (List<Post>)QuerySearch(hql);
         List<PostDTO> postDTOS = new ArrayList<>();
@@ -46,7 +47,7 @@ public class SearchService {
             postDTOS.add(new PostDTO(p));
 
         }
-        return postDTOS;
+        return new Gson().toJson(postDTOS);
     }
 
     private Object QuerySearch(String hql) {

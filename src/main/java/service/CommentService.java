@@ -1,5 +1,6 @@
 package service;
 
+import com.google.gson.Gson;
 import dto.CommentDTO;
 import entity.Comment;
 import org.hibernate.Session;
@@ -14,7 +15,8 @@ import java.util.List;
 public class CommentService {
 
     @WebMethod
-    public boolean createComment(Comment comment){
+    public boolean createComment(String commentObj){
+        Comment comment = new Gson().fromJson(commentObj,Comment.class);
 //        comment.setAddress("Ha Noi");
 //        comment.setName("Ha Noi");
         comment.setStatus(1);
@@ -26,7 +28,8 @@ public class CommentService {
         return true;
     }
     @WebMethod
-    public boolean updateComment(Comment comment, int commentId){
+    public boolean updateComment(String commentObj, int commentId){
+        Comment comment = new Gson().fromJson(commentObj,Comment.class);
 //        comment.setAddress("Ha Noi");
 //        comment.setName("Ha Noi");
         comment.setStatus(1);
@@ -39,7 +42,7 @@ public class CommentService {
         return true;
     }
     @WebMethod
-    public List<CommentDTO> getListComment(){
+    public String getListComment(){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         List<Comment> commentList =  session.createCriteria(Comment.class).list();
@@ -51,17 +54,17 @@ public class CommentService {
             commentDTOS.add(new CommentDTO(comment));
         }
 
-        return commentDTOS;
+        return new Gson().toJson(commentDTOS);
     }
     @WebMethod
-    public Object detailComment(int commentId){
+    public String detailComment(int commentId){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         Comment comment =  session.get(Comment.class,commentId);
         session.getTransaction().commit();
         session.close();
         CommentDTO commentDTO = new CommentDTO(comment);
-        return commentDTO;
+        return new Gson().toJson(commentDTO);
     }
 
 }
