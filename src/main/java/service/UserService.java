@@ -1,6 +1,7 @@
 package service;
 
 import com.google.gson.Gson;
+import dto.UserDTO;
 import entity.Post;
 import entity.Rating;
 import entity.Role;
@@ -11,8 +12,10 @@ import util.HibernateUtil;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
+import javax.persistence.Query;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -23,10 +26,11 @@ public class UserService {
     private static final Logger LOGGER = Logger.getLogger(PostService.class.getName());
 
     @WebMethod
-    public boolean createUser(User user, int[] roleIds) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public boolean createUser(String userObj, int[] roleIds) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        User user = new Gson().fromJson(userObj,User.class);
         user.setStatus(1);
-        user.setSalt(HashPWUtil.generateSalt());
-        user.setPassword(HashPWUtil.hashPW(user.getPassword(),user.getSalt()));
+//        user.setSalt(HashPWUtil.generateSalt());
+//        user.setPassword(HashPWUtil.hashPW(user.getPassword(),user.getSalt()));
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
@@ -44,8 +48,10 @@ public class UserService {
             return false;
         }
     }
+
     @WebMethod
-    public boolean updateUser(User user, int[] roleIds){
+    public boolean updateUser(String userObj, int[] roleIds){
+        User user = new Gson().fromJson(userObj,User.class);
         user.setStatus(1);
         try{
             Session session = HibernateUtil.getSession();
@@ -65,37 +71,45 @@ public class UserService {
         }
     }
     @WebMethod
-    public List<User> getList(){
+    public String  getList(){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         List<User> userList =  session.createQuery("from User ", User.class).list();
         session.getTransaction().commit();
         session.close();
+        List<UserDTO> userDTOS = new ArrayList<>();
         for (User user:userList
              ) {
-            user.setCommentSet(null);
-            user.setPostSet(null);
-            user.setRatingSet(null);
-            user.setRoleSet(null);
-
+            userDTOS.add(new UserDTO(user));
         }
-        return userList;
+        return new Gson().toJson(userDTOS);
     }
     @WebMethod
-    public User detail(int userId){
+    public String  detail(int userId){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         User user =  session.get(User.class,userId);
         session.getTransaction().commit();
         session.close();
-        user.setCommentSet(null);
-        user.setPostSet(null);
-        user.setRatingSet(null);
-        user.setRoleSet(null);
-        return user;
+
+        return new Gson().toJson(new UserDTO(user));
     }
     @WebMethod
-    public boolean delete(User user){
+    public String  getByUserName(String username){
+        Session session = HibernateUtil.getSession();
+        session.beginTransaction();
+        String hql = "FROM User u WHERE u.username ='" + username +"'";
+        Query query = session.createQuery(hql);
+        List object = query.getResultList();
+        User user =  (User)object.get(0);
+        session.getTransaction().commit();
+        session.close();
+
+        return new Gson().toJson(new UserDTO(user));
+    }
+    @WebMethod
+    public boolean delete(String userObj){
+        User user = new Gson().fromJson(userObj,User.class);
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
@@ -117,7 +131,8 @@ public class UserService {
     }
 
     @WebMethod
-    public User login(User user){
+    public String login(String userObj){
+        User user = new Gson().fromJson(userObj,User.class);
         if(user != null){
             try{
                 Session session = HibernateUtil.getSession();
@@ -134,7 +149,7 @@ public class UserService {
                         existedUser.setPostSet(null);
                         existedUser.setRatingSet(null);
                         existedUser.setRoleSet(null);
-                        return existedUser;
+                        return new Gson().toJson(existedUser);
                     }
                 }
                 return null;

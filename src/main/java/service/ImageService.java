@@ -1,5 +1,7 @@
 package service;
 
+import com.google.gson.Gson;
+import dto.ImageDTO;
 import entity.Image;
 import entity.Image;
 import org.hibernate.Session;
@@ -16,8 +18,9 @@ public class ImageService {
     private static final Logger LOGGER = Logger.getLogger(ImageService.class.getName());
 
     @WebMethod
-    public boolean createImage(Image image){
-        if(image != null){
+    public boolean createImage(String imageObj){
+        if(imageObj != null){
+            Image image = new Gson().fromJson(imageObj,Image.class);
             image.setStatus(1);
             try{
                 Session session = HibernateUtil.getSession();
@@ -37,7 +40,7 @@ public class ImageService {
     }
 
     @WebMethod
-    public List<Image> getAllImage(){
+    public String getAllImage(){
         List<Image> imageList = new ArrayList<Image>();
         try{
             Session session = HibernateUtil.getSession();
@@ -45,13 +48,12 @@ public class ImageService {
             imageList =  session.createQuery("from Image ", Image.class).list();
             session.close();
             if(imageList != null){
+                List<ImageDTO> imageDTOS = new ArrayList<>();
                 for (Image image: imageList
                      ) {
-                    image.setPost(null);
-                    image.setCommentSet(null);
-                    image.setRatingSet(null);
+                    imageDTOS.add(new ImageDTO(image));
                 }
-                return imageList;
+                return new Gson().toJson(imageDTOS);
             }
             return null;
         }
@@ -63,17 +65,15 @@ public class ImageService {
     }
 
     @WebMethod
-    public Image getByIdImage(int imageId){
+    public String getByIdImage(int imageId){
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
             Image image =  session.get(Image.class, imageId);
             session.close();
             if(image != null){
-                image.setPost(null);
-                image.setCommentSet(null);
-                image.setRatingSet(null);
-                return image;
+
+                return new Gson().toJson(new ImageDTO(image));
             }
             return null;
         }
@@ -85,7 +85,8 @@ public class ImageService {
     }
 
     @WebMethod
-    public boolean updateImage(Image image){
+    public boolean updateImage(String imageObj){
+        Image image = new Gson().fromJson(imageObj,Image.class);
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();
@@ -102,7 +103,8 @@ public class ImageService {
     }
 
     @WebMethod
-    public boolean deleteImage(Image image){
+    public boolean deleteImage(String imageObj){
+        Image image = new Gson().fromJson(imageObj,Image.class);
         try{
             Session session = HibernateUtil.getSession();
             session.beginTransaction();

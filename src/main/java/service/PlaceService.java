@@ -1,18 +1,22 @@
 package service;
 
+import com.google.gson.Gson;
+import dto.PlaceDTO;
 import entity.Place;
 import org.hibernate.Session;
 import util.HibernateUtil;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebService
 public class PlaceService {
 
     @WebMethod
-    public boolean createPlace(Place place){
+    public boolean createPlace(String placeObj){
+        Place place = new Gson().fromJson(placeObj,Place.class);
 //        place.setAddress("Ha Noi");
 //        place.setName("Ha Noi");
         place.setStatus(1);
@@ -24,7 +28,8 @@ public class PlaceService {
         return true;
     }
     @WebMethod
-    public boolean updatePlace(Place place, int placeId){
+    public boolean updatePlace(String placeObj, int placeId){
+        Place place = new Gson().fromJson(placeObj,Place.class);
 //        place.setAddress("Ha Noi");
 //        place.setName("Ha Noi");
         place.setStatus(1);
@@ -37,27 +42,28 @@ public class PlaceService {
         return true;
     }
     @WebMethod
-    public List<Place> getListPlace(){
+    public String getListPlace(){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         List<Place> placeList =  session.createCriteria(Place.class).list();
         session.getTransaction().commit();
         session.close();
+        List<Object> placeDTOS = new ArrayList<>();
         for (Place place:placeList
              ) {
-            place.setPostSet(null);
+            placeDTOS.add(new PlaceDTO(place));
         }
-        return placeList;
+        return new Gson().toJson(placeDTOS);
     }
     @WebMethod
-    public Place detailPlace(int placeId){
+    public String detailPlace(int placeId){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         Place place =  session.get(Place.class,placeId);
         session.getTransaction().commit();
         session.close();
-        place.setPostSet(null);
-        return place;
+
+        return new Gson().toJson(new PlaceDTO(place));
     }
 
 }
