@@ -4,6 +4,7 @@ import entity.*;
 import util.ObjectUtil;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ public class UserDTO {
     private String email;
     private String username;
     private String token;
-    private List<Integer> role;
+    private List<String> role;
     private String salt;
     private int status;
 
@@ -25,7 +26,10 @@ public class UserDTO {
         ObjectUtil.cloneObject(this,user);
         for (Role r:user.getRoleSet()
              ) {
-            role.add(r.getId());
+            if (this.role == null){
+                this.role = new ArrayList<>();
+            }
+            this.role.add(r.getName());
         }
     }
 

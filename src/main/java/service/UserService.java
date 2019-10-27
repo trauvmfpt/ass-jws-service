@@ -104,8 +104,8 @@ public class UserService {
         User user =  (User)object.get(0);
         session.getTransaction().commit();
         session.close();
-
-        return new Gson().toJson(new UserDTO(user));
+        UserDTO userDTO = new UserDTO(user);
+        return new Gson().toJson(userDTO);
     }
     @WebMethod
     public boolean delete(String userObj){
