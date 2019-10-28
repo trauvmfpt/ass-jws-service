@@ -3,6 +3,7 @@ package service;
 import com.google.gson.Gson;
 import dto.PlaceDTO;
 import entity.Place;
+import entity.Post;
 import org.hibernate.Session;
 import util.HibernateUtil;
 
@@ -45,7 +46,7 @@ public class PlaceService {
     public String getListPlace(){
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
-        List<Place> placeList =  session.createCriteria(Place.class).list();
+        List<Place> placeList =  session.createQuery("from Place ", Place.class).list();;
         session.getTransaction().commit();
         session.close();
         List<Object> placeDTOS = new ArrayList<>();
@@ -62,8 +63,8 @@ public class PlaceService {
         Place place =  session.get(Place.class,placeId);
         session.getTransaction().commit();
         session.close();
-
-        return new Gson().toJson(new PlaceDTO(place));
+        PlaceDTO placeDTO = new PlaceDTO(place);
+        return new Gson().toJson(placeDTO);
     }
 
 }
