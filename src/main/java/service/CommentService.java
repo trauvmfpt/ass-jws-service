@@ -17,8 +17,6 @@ public class CommentService {
     @WebMethod
     public boolean createComment(String commentObj){
         Comment comment = new Gson().fromJson(commentObj,Comment.class);
-//        comment.setAddress("Ha Noi");
-//        comment.setName("Ha Noi");
         comment.setStatus(1);
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
@@ -30,8 +28,6 @@ public class CommentService {
     @WebMethod
     public boolean updateComment(String commentObj, int commentId){
         Comment comment = new Gson().fromJson(commentObj,Comment.class);
-//        comment.setAddress("Ha Noi");
-//        comment.setName("Ha Noi");
         comment.setStatus(1);
         Session session = HibernateUtil.getSession();
         session.beginTransaction();

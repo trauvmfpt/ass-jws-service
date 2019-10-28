@@ -14,6 +14,7 @@ public class PostDTO {
     private String info;
     private String userName;
     private int placeId;
+    private int userId;
     private int status;
     private String title;
     private String description;
@@ -62,10 +63,19 @@ public class PostDTO {
         this.ratings = ratings;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     public PostDTO(Post post) {
         ObjectUtil.cloneObject(this,post);
         if (post.getUser() != null){
             this.userName = post.getUser().getUsername();
+            this.userId = post.getUser().getId();
         }
         this.placeId = post.getPlace().getId();
         for (Image i : post.getImageSet()) {

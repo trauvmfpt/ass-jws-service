@@ -1,7 +1,12 @@
 package dto;
 
+import entity.Comment;
 import entity.Image;
+import entity.Rating;
 import util.ObjectUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ImageDTO {
     private int id;
@@ -9,9 +14,26 @@ public class ImageDTO {
     private int postId;
     private int status;
 
+    private List<CommentDTO> comments;
+    private List<RatingDTO> ratings;
+
     public ImageDTO(Image image) {
         ObjectUtil.cloneObject(this,image);
         this.postId = image.getPost().getId();
+
+        for (Comment c : image.getCommentSet()) {
+            if (this.comments == null){
+                this.comments = new ArrayList<>();
+            }
+            this.comments.add(new CommentDTO(c));
+        }
+
+        for (Rating r : image.getRatingSet()) {
+            if (this.ratings == null){
+                this.ratings = new ArrayList<>();
+            }
+            this.ratings.add(new RatingDTO(r));
+        }
     }
 
     public int getId() {

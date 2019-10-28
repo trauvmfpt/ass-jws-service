@@ -9,12 +9,26 @@ public class RatingDTO {
     private int postId;
     private int imageId;
     private int userId;
+    private String userName;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public RatingDTO(Rating rating) {
         ObjectUtil.cloneObject(this,rating);
-        this.postId = rating.getPost().getId();
-        this.imageId = rating.getImage().getId();
+        if(rating.getPost() != null){
+            this.postId = rating.getPost().getId();
+        }
+        if(rating.getImage() != null){
+            this.imageId = rating.getImage().getId();
+        }
         this.userId = rating.getUser().getId();
+        this.userName = rating.getUser().getUsername();
     }
 
     public int getId() {

@@ -86,6 +86,26 @@ public class RatingService {
     }
 
     @WebMethod
+    public String getByUserIdAndImageId(int userId, int imageId){
+        try{
+            Session session = HibernateUtil.getSession();
+            session.beginTransaction();
+            String sqlQuery = "select r from Rating r where r.user.id = :userId and r.image.id = :imageId";
+            Rating rating =  session.createQuery(sqlQuery, Rating.class).setParameter("userId", userId).setParameter("imageId", imageId).getSingleResult();
+            session.close();
+            if(rating != null){
+                return new Gson().toJson(new RatingDTO(rating));
+            }
+            return null;
+        }
+        catch (Exception ex){
+            LOGGER.log(Level.INFO, "Error create rating");
+            LOGGER.log(Level.WARNING, ex.getMessage());
+        }
+        return null;
+    }
+
+    @WebMethod
     public boolean updateRate(String ratingObj){
         Rating rating = new Gson().fromJson(ratingObj,Rating.class);
         try{
@@ -111,7 +131,7 @@ public class RatingService {
             session.beginTransaction();
             Rating existedRating =  session.get(Rating.class, rating.getId());
             if(existedRating != null){
-                session.update(existedRating);
+                session.delete(existedRating);
                 session.getTransaction().commit();
                 session.close();
                 return true;

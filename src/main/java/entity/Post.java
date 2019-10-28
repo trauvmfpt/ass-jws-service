@@ -46,15 +46,19 @@ public class Post {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "post", cascade = CascadeType.ALL)
     @JsonIgnore
+    @OrderBy
     private Set<Image> imageSet;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "post", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "post", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonIgnore
+    @OrderBy
     private Set<Comment> commentSet;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "post", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "post", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonIgnore
+    @OrderBy
     private Set<Rating> ratingSet;
+
     private int status;
 
     public Post() {
