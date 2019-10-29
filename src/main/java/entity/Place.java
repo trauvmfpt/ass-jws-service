@@ -14,6 +14,7 @@ public class Place {
     private String address;
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JsonManagedReference
+    @OrderBy
     private Set<Post> postSet;
     private int status;
 

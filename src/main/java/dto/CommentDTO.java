@@ -7,15 +7,29 @@ public class CommentDTO {
     private int id;
     private String content;
     private int userId;
+    private String userName;
     private int postId;
     private int imageId;
     private int status;
 
+    public String getUsername() {
+        return userName;
+    }
+
+    public void setUsername(String userName) {
+        this.userName = userName;
+    }
+
     public CommentDTO(Comment comment) {
         ObjectUtil.cloneObject(this,comment);
         this.userId = comment.getUser().getId();
-        this.postId = comment.getPost().getId();
-        this.imageId = comment.getImage().getId();
+        this.userName = comment.getUser().getUsername();
+        if(comment.getPost() != null){
+            this.postId = comment.getPost().getId();
+        }
+        if(comment.getImage() != null){
+            this.imageId = comment.getImage().getId();
+        }
     }
 
     public int getId() {
